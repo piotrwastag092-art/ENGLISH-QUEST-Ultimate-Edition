@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ENGLISH LIFE — Learn English RPG</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#080b12;
+    --panel:#111722;
+    --panel2:#171e2c;
+    --border:#293448;
+    --text:#edf2f7;
+    --muted:#8994a7;
+    --green:#55ef9b;
+    --blue:#58a6ff;
+    --yellow:#ffd166;
+    --red:#ff5d73;
+    --purple:#b084ff;
+}
+
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at 20% 20%,#15233b 0,transparent 35%),
+        radial-gradient(circle at 80% 80%,#201533 0,transparent 35%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,Arial,sans-serif;
+    min-height:100vh;
+}
+
+button,input,select{
+    font:inherit;
+}
+
+button{
+    border:1px solid var(--border);
+    background:#1a2231;
+    color:white;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.15s;
+}
+
+button:hover{
+    background:#263247;
+    transform:translateY(-1px);
+}
+
+button.primary{
+    background:#1f6f49;
+    border-color:#3cb878;
+}
+
+button.danger{
+    background:#6e2330;
+}
+
+button.gold{
+    background:#66521d;
+}
+
+#boot{
+    position:fixed;
+    inset:0;
+    background:#05070b;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    font-family:monospace;
+}
+
+.bootTitle{
+    font-size:42px;
+    letter-spacing:8px;
+    color:var(--green);
+    text-shadow:0 0 25px #32ff91;
+}
+
+.bootSub{
+    color:#789;
+    margin:15px;
+}
+
+.progress{
+    width:min(500px,80vw);
+    height:8px;
+    border:1px solid #244;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress i{
+    display:block;
+    width:0;
+    height:100%;
+    background:var(--green);
+    transition:.3s;
+}
+
+#app{
+    display:none;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(7,10,16,.92);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--border);
+}
+
+.top{
+    max-width:1500px;
+    margin:auto;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    font-weight:900;
+    letter-spacing:2px;
+    font-size:19px;
+    color:var(--green);
+}
+
+.stats{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.stat{
+    background:#121925;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:6px 10px;
+    font-size:12px;
+}
+
+.stat b{
+    color:var(--green);
+}
+
+main{
+    max-width:1500px;
+    margin:auto;
+    padding:20px;
+}
+
+.nav{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.nav button.active{
+    background:#28543e;
+    border-color:#55ef9b;
+}
+
+.view{
+    display:none;
+}
+
+.view.active{
+    display:block;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:linear-gradient(145deg,var(--panel),#0e141f);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:18px;
+    box-shadow:0 10px 30px #0003;
+}
+
+.card h2,.card h3{
+    margin-top:0;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+.big{
+    font-size:30px;
+    font-weight:800;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#202b3d;
+    color:#b9c7da;
+    font-size:11px;
+    margin:2px;
+}
+
+.badge.green{
+    color:#83ffc0;
+    background:#173b2b;
+}
+
+.badge.red{
+    color:#ff9baa;
+    background:#431e27;
+}
+
+.badge.gold{
+    color:#ffe49b;
+    background:#453919;
+}
+
+.bar{
+    height:8px;
+    background:#080c13;
+    border-radius:20px;
+    overflow:hidden;
+    margin:8px 0 15px;
+}
+
+.bar i{
+    display:block;
+    height:100%;
+    background:var(--green);
+}
+
+.location{
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.location .emoji{
+    font-size:45px;
+}
+
+.option{
+    width:100%;
+    text-align:left;
+    margin:6px 0;
+}
+
+.dialogue{
+    background:#0b1019;
+    border:1px solid #263348;
+    border-radius:14px;
+    padding:20px;
+    margin:10px 0;
+}
+
+.npcName{
+    color:var(--yellow);
+    font-weight:bold;
+}
+
+.npcText{
+    font-size:18px;
+    line-height:1.6;
+    margin:15px 0;
+}
+
+.exerciseWord{
+    font-size:34px;
+    font-weight:800;
+    margin:20px 0;
+    color:#fff;
+}
+
+.answer{
+    width:100%;
+    padding:14px;
+    background:#0b1018;
+    border:1px solid #33415a;
+    color:white;
+    border-radius:10px;
+    outline:none;
+}
+
+.feedback{
+    margin-top:15px;
+    padding:14px;
+    border-radius:10px;
+}
+
+.feedback.good{
+    background:#123b27;
+    border:1px solid #2b8b59;
+}
+
+.feedback.bad{
+    background:#431d25;
+    border:1px solid #9a3c4c;
+}
+
+.list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    background:#101722;
+    border-radius:9px;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:#0009;
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modalBox{
+    width:min(800px,95vw);
+    max-height:90vh;
+    overflow:auto;
+    background:#111722;
+    border:1px solid #34445c;
+    border-radius:18px;
+    padding:25px;
+}
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#111a27;
+    border:1px solid #41526c;
+    padding:15px 20px;
+    border-radius:12px;
+    z-index:5000;
+    box-shadow:0 15px 40px #0008;
+    animation:toast .25s;
+}
+
+@keyframes toast{
+    from{transform:translateY(20px);opacity:0}
+    to{transform:translateY(0);opacity:1}
+}
+
+.event{
+    border-left:4px solid var(--yellow);
+    padding:12px;
+    background:#191712;
+    margin:8px 0;
+}
+
+.shopItem{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.map{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.map button{
+    min-height:110px;
+}
+
+.difficulty{
+    font-size:12px;
+    color:var(--purple);
+}
+
+.history{
+    max-height:300px;
+    overflow:auto;
+}
+
+.history div{
+    padding:8px;
+    border-bottom:1px solid #202938;
+}
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#586477;
+}
+
+@media(max-width:700px){
+    .top{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .map{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    main{
+        padding:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="boot">
+    <div class="bootTitle">ENGLISH LIFE</div>
+    <div class="bootSub">INITIALIZING LANGUAGE SIMULATION...</div>
+    <div class="progress"><i id="bootBar"></i></div>
+    <div id="bootText" class="muted" style="margin-top:15px">
+        Loading vocabulary...
+    </div>
+</div>
+
+<div id="app">
+
+<header>
+<div class="top">
+
+<div class="logo">ENGLISH LIFE</div>
+
+<div class="stats">
+    <div class="stat">LEVEL <b id="level">1</b></div>
+    <div class="stat">XP <b id="xp">0</b></div>
+    <div class="stat">£ <b id="money">100</b></div>
+    <div class="stat">ENERGY <b id="energy">100</b></div>
+    <div class="stat">DAY <b id="day">1</b></div>
+    <div class="stat">ENGLISH <b id="engLevel">A1</b></div>
+</div>
+
+</div>
+</header>
+
+<main>
+
+<div class="nav">
+    <button data-view="home" class="active">🏠 Home</button>
+    <button data-view="world">🗺️ World</button>
+    <button data-view="learn">📚 Learn</button>
+    <button data-view="dialogue">💬 People</button>
+    <button data-view="career">💼 Job</button>
+    <button data-view="bank">🏦 Bank</button>
+    <button data-view="shop">🛒 Shop</button>
+    <button data-view="apartment">🏠 Apartment</button>
+    <button data-view="travel">✈️ Travel</button>
+    <button data-view="statsView">📊 Progress</button>
+</div>
+
+
+<!-- HOME -->
+
+<section id="home" class="view active">
+
+<div class="grid">
+
+<div class="card">
+<h2>Good morning.</h2>
+<p id="homeGreeting" class="muted"></p>
+
+<div class="big" id="homeWeather">☀️</div>
+
+<p>
+Today is day <b id="homeDay">1</b>.
+</p>
+
+<button class="primary" onclick="startDailyExercise()">
+🎯 Start today's English
+</button>
+
+<button onclick="newDay()">
+🌙 End the day
+</button>
+</div>
+
+
+<div class="card">
+<h2>📈 Your English</h2>
+
+<div>
+A1
+<div class="bar"><i id="a1bar"></i></div>
+</div>
+
+<div>
+A2
+<div class="bar"><i id="a2bar"></i></div>
+</div>
+
+<div>
+B1
+<div class="bar"><i id="b1bar"></i></div>
+</div>
+
+<div>
+B2
+<div class="bar"><i id="b2bar"></i></div>
+</div>
+
+<div>
+C1
+<div class="bar"><i id="c1bar"></i></div>
+</div>
+
+<div>
+C2
+<div class="bar"><i id="c2bar"></i></div>
+</div>
+
+</div>
+
+
+<div class="card">
+<h2>🧠 Memory System</h2>
+
+<p>
+Words you've struggled with:
+</p>
+
+<div id="weakWords"></div>
+
+<button onclick="startWeakPractice()">
+🔁 Practice my mistakes
+</button>
+</div>
+
+
+<div class="card">
+<h2>📰 Daily events</h2>
+<div id="dailyEvents"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- WORLD -->
+
+<section id="world" class="view">
+
+<div class="card">
+<h2>🗺️ World</h2>
+<p class="muted">
+Choose where you want to go.
+</p>
+
+<div class="map">
+
+<button onclick="travelTo('London')">
+🇬🇧<br><b>London</b><br>
+<span class="muted">Home city</span>
+</button>
+
+<button onclick="travelTo('Cafe')">
+☕<br><b>Central Café</b>
+</button>
+
+<button onclick="travelTo('Office')">
+🏢<br><b>Office</b>
+</button>
+
+<button onclick="travelTo('University')">
+🎓<br><b>University</b>
+</button>
+
+<button onclick="travelTo('Airport')">
+✈️<br><b>Airport</b>
+</button>
+
+<button onclick="travelTo('Market')">
+🛍️<br><b>Market</b>
+</button>
+
+<button onclick="travelTo('Park')">
+🌳<br><b>Park</b>
+</button>
+
+<button onclick="travelTo('Station')">
+🚆<br><b>Station</b>
+</button>
+
+</div>
+</div>
+
+<div class="card">
+<h2>📍 Current location</h2>
+<div id="locationInfo"></div>
+</div>
+
+</section>
+
+
+<!-- LEARN -->
+
+<section id="learn" class="view">
+
+<div class="grid">
+
+<div class="card">
+<h2>♾️ Infinite Exercise Generator</h2>
+
+<p>
+The system creates exercises based on your level and mistakes.
+</p>
+
+<select id="exerciseType">
+<option value="mixed">Mixed</option>
+<option value="translate">Translation</option>
+<option value="vocabulary">Vocabulary</option>
+<option value="grammar">Grammar</option>
+<option value="fill">Fill the gap</option>
+<option value="dialogue">Dialogue</option>
+</select>
+
+<br><br>
+
+<button class="primary" onclick="generateExercise()">
+⚡ Generate exercise
+</button>
+
+</div>
+
+
+<div class="card">
+<h2>🎯 Current exercise</h2>
+
+<div id="exerciseArea">
+<p class="muted">
+Press "Generate exercise".
+</p>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PEOPLE -->
+
+<section id="dialogue" class="view">
+
+<div class="grid" id="npcList"></div>
+
+<div class="card" id="dialogueBox">
+<h2>💬 Conversations</h2>
+<p>Select someone above.</p>
+</div>
+
+</section>
+
+
+<!-- CAREER -->
+
+<section id="career" class="view">
+
+<div class="grid">
+
+<div class="card">
+<h2>💼 Job</h2>
+
+<p id="jobStatus"></p>
+
+<button class="primary" onclick="work()">
+💻 Work for one hour
+</button>
+
+<button onclick="applyJob()">
+📄 Apply for a job
+</button>
+
+<div id="jobResult"></div>
+</div>
+
+<div class="card">
+<h2>🧑‍💼 Career level</h2>
+<div class="big" id="careerLevel">Unemployed</div>
+<p class="muted">
+Your English level affects the jobs you can access.
+</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BANK -->
+
+<section id="bank" class="view">
+
+<div class="grid">
+
+<div class="card">
+<h2>🏦 Bank</h2>
+
+<p>Balance:</p>
+
+<div class="big">£<span id="bankBalance">0</span></div>
+
+<hr>
+
+<input id="depositAmount"
+type="number"
+placeholder="Amount">
+
+<button onclick="deposit()">Deposit</button>
+<button onclick="withdraw()">Withdraw</button>
+
+</div>
+
+<div class="card">
+<h2>📜 Transactions</h2>
+<div id="transactions"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SHOP -->
+
+<section id="shop" class="view">
+
+<div class="card">
+
+<h2>🛒 English Life Shop</h2>
+
+<div id="shopItems"></div>
+
+</div>
+
+</section>
+
+
+<!-- APARTMENT -->
+
+<section id="apartment" class="view">
+
+<div class="grid">
+
+<div class="card">
+<h2>🏠 Your Apartment</h2>
+
+<div class="big">Level <span id="aptLevel">1</span></div>
+
+<p>
+A place to sleep, study and recover.
+</p>
+
+<button onclick="sleep()">😴 Sleep</button>
+
+<button onclick="studyAtHome()">📖 Study</button>
+
+<button onclick="upgradeApartment()">🔨 Upgrade</button>
+
+</div>
+
+<div class="card">
+<h2>🛋️ Furniture</h2>
+<div id="furniture"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TRAVEL -->
+
+<section id="travel" class="view">
+
+<div class="card">
+
+<h2>✈️ Travel</h2>
+
+<p class="muted">
+Travel unlocks new situations and vocabulary.
+</p>
+
+<div class="grid">
+
+<button onclick="visitCountry('England')">
+🇬🇧 England
+</button>
+
+<button onclick="visitCountry('USA')">
+🇺🇸 USA
+</button>
+
+<button onclick="visitCountry('Canada')">
+🇨🇦 Canada
+</button>
+
+<button onclick="visitCountry('Australia')">
+🇦🇺 Australia
+</button>
+
+</div>
+
+<div id="travelResult"></div>
+
+</div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section id="statsView" class="view">
+
+<div class="grid">
+
+<div class="card">
+<h2>📊 Statistics</h2>
+
+<div id="statistics"></div>
+</div>
+
+<div class="card">
+<h2>🧠 Weak vocabulary</h2>
+<div id="mistakeList"></div>
+</div>
+
+<div class="card">
+<h2>📜 Activity history</h2>
+<div class="history" id="history"></div>
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+ENGLISH LIFE • Learn English by living a digital life
+</footer>
+
+</div>
+
+
+<div class="modal" id="modal">
+<div class="modalBox" id="modalContent"></div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const WORDS = {
+
+A1:[
+["house","dom"],
+["water","woda"],
+["food","jedzenie"],
+["friend","przyjaciel"],
+["book","książka"],
+["school","szkoła"],
+["work","praca"],
+["money","pieniądze"],
+["car","samochód"],
+["dog","pies"],
+["cat","kot"],
+["day","dzień"],
+["night","noc"],
+["good","dobry"],
+["bad","zły"],
+["big","duży"],
+["small","mały"],
+["happy","szczęśliwy"],
+["sad","smutny"],
+["walk","spacerować"]
+],
+
+A2:[
+["usually","zwykle"],
+["enough","wystarczająco"],
+["quiet","cichy"],
+["expensive","drogi"],
+["cheap","tani"],
+["decide","decydować"],
+["arrive","przybywać"],
+["remember","pamiętać"],
+["forget","zapominać"],
+["promise","obiecywać"],
+["borrow","pożyczać"],
+["choose","wybierać"],
+["happen","wydarzać się"],
+["improve","poprawiać"],
+["return","wracać"],
+["message","wiadomość"],
+["journey","podróż"],
+["problem","problem"],
+["mistake","błąd"],
+["future","przyszłość"]
+],
+
+B1:[
+["opportunity","możliwość"],
+["environment","środowisko"],
+["experience","doświadczenie"],
+["decision","decyzja"],
+["relationship","relacja"],
+["achievement","osiągnięcie"],
+["behavior","zachowanie"],
+["challenge","wyzwanie"],
+["knowledge","wiedza"],
+["responsibility","odpowiedzialność"],
+["confidence","pewność siebie"],
+["improve","ulepszać"],
+["avoid","unikać"],
+["suggest","sugerować"],
+["realize","zdawać sobie sprawę"],
+["depend","zależeć"],
+["require","wymagać"],
+["although","chociaż"],
+["however","jednak"],
+["probably","prawdopodobnie"]
+],
+
+B2:[
+["significant","znaczący"],
+["consequence","konsekwencja"],
+["accurate","dokładny"],
+["assumption","założenie"],
+["perspective","perspektywa"],
+["evidence","dowód"],
+["approach","podejście"],
+["issue","kwestia"],
+["maintain","utrzymywać"],
+["achieve","osiągać"],
+["relevant","istotny"],
+["complex","złożony"],
+["reliable","wiarygodny"],
+["efficient","wydajny"],
+["contribute","przyczyniać się"],
+["establish","ustanawiać"],
+["consider","rozważać"],
+["determine","określać"],
+["enhance","wzmacniać"],
+["despite","pomimo"]
+],
+
+C1:[
+["subtle","subtelny"],
+["compelling","przekonujący"],
+["ambiguous","dwuznaczny"],
+["inevitable","nieunikniony"],
+["controversial","kontrowersyjny"],
+["sophisticated","wyrafinowany"],
+["underestimate","nie doceniać"],
+["acknowledge","uznawać"],
+["distinguish","rozróżniać"],
+["anticipate","przewidywać"],
+["implement","wdrażać"],
+["interpret","interpretować"],
+["substantial","znaczny"],
+["coherent","spójny"],
+["precise","precyzyjny"],
+["reluctant","niechętny"],
+["persistent","wytrwały"],
+["vulnerable","podatny"],
+["allocate","przydzielać"],
+["justify","uzasadniać"]
+],
+
+C2:[
+["ubiquitous","wszechobecny"],
+["paradigm","paradygmat"],
+["nuance","niuans"],
+["pragmatic","pragmatyczny"],
+["conundrum","trudny problem"],
+["meticulous","skrupulatny"],
+["discrepancy","rozbieżność"],
+["intrinsic","wewnętrzny"],
+["exacerbate","pogarszać"],
+["reconcile","pogodzić"],
+["scrutinize","dokładnie analizować"],
+["contemplate","rozważać"],
+["articulate","wyrażać jasno"],
+["pervasive","wszechobecny"],
+["plausible","wiarygodny"],
+["inherent","nieodłączny"],
+["predominantly","głównie"],
+["undermine","podważać"],
+["resilience","odporność"],
+["conspicuous","rzucający się w oczy"]
+]
+
+};
+
+const NPCS = {
+
+emma:{
+name:"Emma",
+emoji:"👩‍💼",
+job:"Barista",
+personality:"friendly",
+level:"A2",
+memory:[],
+relationship:0,
+intro:"Hi! I'm Emma. I work here almost every day."
+},
+
+jack:{
+name:"Jack",
+emoji:"👨‍💻",
+job:"Developer",
+personality:"sarcastic",
+level:"B1",
+memory:[],
+relationship:0,
+intro:"Hey. You look like someone who is about to break production."
+},
+
+sophie:{
+name:"Sophie",
+emoji:"👩‍🎓",
+job:"Student",
+personality:"curious",
+level:"B1",
+memory:[],
+relationship:0,
+intro:"Hello! I'm Sophie. Are you learning English too?"
+},
+
+william:{
+name:"William",
+emoji:"👨‍💼",
+job:"Manager",
+personality:"formal",
+level:"B2",
+memory:[],
+relationship:0,
+intro:"Good afternoon. I hope your day is going well."
+},
+
+olivia:{
+name:"Olivia",
+emoji:"👩‍🎨",
+job:"Designer",
+personality:"creative",
+level:"C1",
+memory:[],
+relationship:0,
+intro:"I have an idea. Actually, I have seventeen ideas."
+}
+
+};
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let state = {
+
+day:1,
+money:100,
+bank:250,
+energy:100,
+
+xp:0,
+level:1,
+
+englishXP:{
+A1:0,
+A2:0,
+B1:0,
+B2:0,
+C1:0,
+C2:0
+},
+
+englishLevel:"A1",
+
+career:"Unemployed",
+careerLevel:0,
+
+location:"London",
+
+apartment:1,
+
+inventory:[],
+
+mistakes:{},
+
+history:[],
+
+stats:{
+correct:0,
+wrong:0,
+exercises:0,
+wordsLearned:0,
+days:1,
+conversations:0,
+moneyEarned:0,
+hoursWorked:0
+},
+
+relationships:{},
+
+quests:{
+chapter:1,
+progress:0
+},
+
+settings:{
+sound:true
+}
+
+};
+
+
+/* =========================================================
+   SAVE / LOAD
+========================================================= */
+
+function save(){
+
+localStorage.setItem(
+"englishLifeSave",
+JSON.stringify(state)
+);
+
+}
+
+function load(){
+
+let saved=localStorage.getItem("englishLifeSave");
+
+if(saved){
+
+try{
+
+state=Object.assign(
+state,
+JSON.parse(saved)
+);
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+}
+
+load();
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function $(id){
+return document.getElementById(id);
+}
+
+function toast(text){
+
+let el=document.createElement("div");
+
+el.className="toast";
+el.innerHTML=text;
+
+document.body.appendChild(el);
+
+setTimeout(()=>el.remove(),2800);
+
+}
+
+function addHistory(text){
+
+state.history.unshift(
+`Day ${state.day}: ${text}`
+);
+
+state.history=state.history.slice(0,100);
+
+}
+
+function addXP(amount){
+
+state.xp+=amount;
+
+while(state.xp>=state.level*100){
+
+state.xp-=state.level*100;
+state.level++;
+
+toast(`⭐ Level up! You are now level ${state.level}.`);
+
+}
+
+}
+
+function money(amount,reason){
+
+state.money+=amount;
+
+if(amount>0){
+
+state.stats.moneyEarned+=amount;
+
+}
+
+addHistory(
+`${amount>=0?"+":""}£${amount} — ${reason}`
+);
+
+}
+
+function getCurrentWords(){
+
+return WORDS[state.englishLevel] || WORDS.A1;
+
+}
+
+function random(arr){
+
+return arr[Math.floor(Math.random()*arr.length)];
+
+}
+
+
+/* =========================================================
+   ENGLISH LEVEL
+========================================================= */
+
+const LEVELS=[
+"A1","A2","B1","B2","C1","C2"
+];
+
+function calculateEnglishLevel(){
+
+let thresholds={
+A1:0,
+A2:100,
+B1:250,
+B2:500,
+C1:850,
+C2:1300
+};
+
+let total=0;
+
+LEVELS.forEach(
+l=>total+=state.englishXP[l]
+);
+
+let level="A1";
+
+for(let l of LEVELS){
+
+if(total>=thresholds[l])
+level=l;
+
+}
+
+state.englishLevel=level;
+
+}
+
+function englishXP(amount,level=state.englishLevel){
+
+state.englishXP[level]+=amount;
+
+calculateEnglishLevel();
+
+}
+
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+let bootProgress=0;
+
+let bootMessages=[
+"Loading vocabulary...",
+"Connecting to English world...",
+"Remembering your mistakes...",
+"Creating NPC personalities...",
+"Preparing infinite exercises...",
+"Building London...",
+"Starting simulation..."
+];
+
+let bootInterval=setInterval(()=>{
+
+bootProgress+=14;
+
+$("bootBar").style.width=
+Math.min(bootProgress,100)+"%";
+
+$("bootText").textContent=
+random(bootMessages);
+
+if(bootProgress>=100){
+
+clearInterval(bootInterval);
+
+setTimeout(()=>{
+
+$("boot").style.display="none";
+$("app").style.display="block";
+
+init();
+
+},500);
+
+}
+
+},180);
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function init(){
+
+calculateEnglishLevel();
+
+render();
+
+renderNPCs();
+
+renderShop();
+
+renderLocation();
+
+dailyEvents();
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document.querySelectorAll(".nav button")
+.forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+document.querySelectorAll(".nav button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+document.querySelectorAll(".view")
+.forEach(v=>v.classList.remove("active"));
+
+$(button.dataset.view).classList.add("active");
+
+render();
+
+});
+
+});
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+$("level").textContent=state.level;
+$("xp").textContent=state.xp;
+$("money").textContent=state.money;
+$("energy").textContent=state.energy;
+$("day").textContent=state.day;
+$("engLevel").textContent=state.englishLevel;
+
+$("homeDay").textContent=state.day;
+
+$("bankBalance").textContent=state.bank;
+
+$("careerLevel").textContent=
+state.career==="Unemployed"
+?"Unemployed"
+:`${state.career} ${state.careerLevel}`;
+
+$("aptLevel").textContent=state.apartment;
+
+let greetings=[
+"Welcome back. Let's improve your English.",
+"Another day, another opportunity to speak English.",
+"Your English journey continues.",
+"Today's English can make tomorrow easier."
+];
+
+$("homeGreeting").textContent=random(greetings);
+
+let total=Object.values(state.englishXP)
+.reduce((a,b)=>a+b,0);
+
+let max=1500;
+
+LEVELS.forEach((level,i)=>{
+
+let percentage=Math.min(
+100,
+(state.englishXP[level]/Math.max(100,i*100+100))*100
+);
+
+$(
+level.toLowerCase()+"bar"
+).style.width=percentage+"%";
+
+});
+
+renderWeakWords();
+renderTransactions();
+renderStats();
+renderFurniture();
+
+save();
+
+}
+
+
+/* =========================================================
+   EXERCISE ENGINE
+========================================================= */
+
+let currentExercise=null;
+
+function generateExercise(customType=null){
+
+let type=customType || $("exerciseType").value;
+
+if(type==="mixed")
+type=random([
+"translate",
+"vocabulary",
+"grammar",
+"fill"
+]);
+
+let words=getCurrentWords();
+
+let pair=random(words);
+
+let exercise;
+
+if(type==="vocabulary"){
+
+exercise={
+type,
+question:`What does "<b>${pair[0]}</b>" mean?`,
+answer:pair[1],
+display:pair[0],
+level:state.englishLevel
+};
+
+}
+
+else if(type==="translate"){
+
+exercise={
+type,
+question:`Translate into English:<br><br><b>${pair[1]}</b>`,
+answer:pair[0],
+display:pair[1],
+level:state.englishLevel
+};
+
+}
+
+else if(type==="fill"){
+
+let examples={
+
+A1:["I ___ at home every day.","She ___ a dog.","They ___ happy."],
+A2:["I usually ___ to work by bus.","We ___ dinner at eight.","He ___ his friend yesterday."],
+B1:["I have already ___ the problem.","She suggested that we ___ earlier.","They have been ___ for hours."],
+B2:["The decision was ___ by several factors.","We need to ___ the consequences.","Despite ___ tired, he continued."],
+C1:["The evidence seems to ___ the theory.","Her argument was highly ___.","We should ___ the implications."],
+C2:["The distinction is difficult to ___.","The situation may ___ the problem.","His explanation was remarkably ___."]
+};
+
+let sentence=random(examples[state.englishLevel]||examples.A1);
+
+exercise={
+type,
+question:`Complete the sentence:<br><br><b>${sentence}</b>`,
+answer:random(words)[0],
+display:sentence,
+level:state.englishLevel
+};
+
+}
+
+else{
+
+let grammar=[
+["I ___ coffee every morning.","drink"],
+["She ___ to London yesterday.","went"],
+["They ___ studying now.","are"],
+["I have ___ this movie before.","seen"],
+["If I had more time, I ___ travel.","would"],
+["He ___ working here since 2020.","has been"]
+];
+
+let g=random(grammar);
+
+exercise={
+type:"grammar",
+question:g[0],
+answer:g[1],
+display:g[0],
+level:state.englishLevel
+};
+
+}
+
+currentExercise=exercise;
+
+$("exerciseArea").innerHTML=`
+
+<div class="difficulty">
+LEVEL ${exercise.level}
+</div>
+
+<div class="exerciseWord">
+${exercise.question}
+</div>
+
+<input
+id="exerciseAnswer"
+class="answer"
+autocomplete="off"
+placeholder="Type your answer..."
+>
+
+<br><br>
+
+<button class="primary"
+onclick="checkExercise()">
+CHECK
+</button>
+
+`;
+
+$("exerciseAnswer").focus();
+
+}
+
+function checkExercise(){
+
+if(!currentExercise)return;
+
+let input=$("exerciseAnswer").value
+.trim()
+.toLowerCase();
+
+let correct=currentExercise.answer
+.toLowerCase();
+
+state.stats.exercises++;
+
+let good=input===correct;
+
+if(good){
+
+state.stats.correct++;
+
+englishXP(10,currentExercise.level);
+
+addXP(15);
+
+state.stats.wordsLearned++;
+
+$("exerciseArea").innerHTML=`
+
+<div class="feedback good">
+<b>✓ Correct!</b><br><br>
+Answer: <b>${currentExercise.answer}</b>
+</div>
+
+<br>
+
+<button class="primary"
+onclick="generateExercise()">
+NEXT
+</button>
+
+`;
+
+addHistory(
+`Correct ${currentExercise.level} exercise: ${currentExercise.answer}`
+);
+
+toast("✓ Correct!");
+
+}else{
+
+state.stats.wrong++;
+
+let word=currentExercise.answer;
+
+state.mistakes[word]=
+(state.mistakes[word]||0)+1;
+
+$("exerciseArea").innerHTML=`
+
+<div class="feedback bad">
+<b>✗ Not quite.</b><br><br>
+
+Your answer:
+<b>${input||"(empty)"}</b>
+
+<br><br>
+
+Correct answer:
+<b>${currentExercise.answer}</b>
+
+<br><br>
+
+The system will remember this mistake and bring
+it back later.
+</div>
+
+<br>
+
+<button class="primary"
+onclick="generateExercise()">
+TRY ANOTHER
+</button>
+
+`;
+
+addHistory(
+`Mistake: "${input}" → "${word}"`
+);
+
+toast("🧠 Mistake remembered.");
+
+}
+
+currentExercise=null;
+
+save();
+render();
+
+}
+
+
+/* =========================================================
+   ERROR DEPENDENT REPETITION
+========================================================= */
+
+function getWeakWords(){
+
+return Object.entries(state.mistakes)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,10);
+
+}
+
+function renderWeakWords(){
+
+let weak=getWeakWords();
+
+if(!weak.length){
+
+$("weakWords").innerHTML=
+`<span class="muted">No mistakes yet. Nice!</span>`;
+
+return;
+
+}
+
+$("weakWords").innerHTML=
+weak.map(([word,count])=>
+`
+<span class="badge red">
+${word} ×${count}
+</span>
+`
+).join("");
+
+}
+
+function startWeakPractice(){
+
+let weak=getWeakWords();
+
+if(!weak.length){
+
+toast("You don't have any weak words yet.");
+
+return;
+
+}
+
+let [word]=random(weak);
+
+let meaning=findMeaning(word);
+
+currentExercise={
+type:"weak",
+question:`What does "<b>${word}</b>" mean?`,
+answer:meaning,
+display:word,
+level:state.englishLevel
+};
+
+document.querySelector('[data-view="learn"]').click();
+
+$("exerciseArea").innerHTML=`
+
+<div class="difficulty">
+🧠 PERSONAL WEAKNESS REVIEW
+</div>
+
+<div class="exerciseWord">
+${word}
+</div>
+
+<p class="muted">
+This word appeared because you previously made a mistake with it.
+</p>
+
+<input
+id="exerciseAnswer"
+class="answer"
+placeholder="Meaning in Polish..."
+>
+
+<br><br>
+
+<button class="primary"
+onclick="checkExercise()">
+CHECK
+</button>
+
+`;
+
+}
+
+function findMeaning(word){
+
+for(let level of LEVELS){
+
+let pair=WORDS[level].find(x=>x[0]===word);
+
+if(pair)return pair[1];
+
+}
+
+return "";
+
+}
+
+
+/* =========================================================
+   DAILY EXERCISE
+========================================================= */
+
+function startDailyExercise(){
+
+document.querySelector('[data-view="learn"]').click();
+
+generateExercise();
+
+}
+
+
+/* =========================================================
+   NPC SYSTEM
+========================================================= */
+
+function renderNPCs(){
+
+$("npcList").innerHTML=
+Object.entries(NPCS)
+.map(([id,npc])=>`
+
+<div class="card">
+
+<div style="font-size:42px">
+${npc.emoji}
+</div>
+
+<h2>${npc.name}</h2>
+
+<span class="badge">${npc.job}</span>
+<span class="badge">${npc.level}</span>
+
+<p>${npc.intro}</p>
+
+<p>
+Relationship:
+<b>${npc.relationship}</b>
+</p>
+
+<button onclick="talk('${id}')">
+💬 Talk
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+function talk(id){
+
+let npc=NPCS[id];
+
+state.stats.conversations++;
+
+let memory=npc.memory||[];
+
+let memoryText="";
+
+if(memory.length){
+
+memoryText=
+`<div class="muted">
+🧠 ${npc.name} remembers:<br>
+${memory.slice(-3).map(x=>"• "+x).join("<br>")}
+</div>`;
+
+}
+
+$("dialogueBox").innerHTML=`
+
+<div class="dialogue">
+
+<div class="npcName">
+${npc.emoji} ${npc.name} — ${npc.job}
+</div>
+
+<div class="npcText">
+${npc.intro}
+</div>
+
+${memoryText}
+
+<hr>
+
+<button class="option"
+onclick="npcChoice('${id}','english')">
+"I am learning English."
+</button>
+
+<button class="option"
+onclick="npcChoice('${id}','work')">
+"Tell me about your job."
+</button>
+
+<button class="option"
+onclick="npcChoice('${id}','question')">
+"Can I ask you something?"
+</button>
+
+<button class="option"
+onclick="npcChoice('${id}','friend')">
+"Let's get to know each other."
+</button>
+
+</div>
+
+`;
+
+}
+
+function npcChoice(id,type){
+
+let npc=NPCS[id];
+
+let response="";
+
+if(type==="english"){
+
+response=
+`That's great! What part of English is hardest for you?`;
+
+npc.memory.push(
+"You told me that you are learning English."
+);
+
+npc.relationship+=3;
+
+}
+
+if(type==="work"){
+
+response=
+`I work as a ${npc.job}. It can be difficult sometimes, but I like it.`;
+
+npc.memory.push(
+"You asked about my job."
+);
+
+npc.relationship+=2;
+
+}
+
+if(type==="question"){
+
+response=
+`Sure. Ask me anything. Just don't ask me to explain British bureaucracy.`;
+
+npc.memory.push(
+"You asked me a question."
+);
+
+npc.relationship+=2;
+
+}
+
+if(type==="friend"){
+
+response=
+`I'd like that. We should talk again tomorrow.`;
+
+npc.memory.push(
+"You wanted to become friends."
+);
+
+npc.relationship+=5;
+
+}
+
+npc.memory=npc.memory.slice(-20);
+
+addHistory(
+`Talked to ${npc.name}: ${type}`
+);
+
+$("dialogueBox").innerHTML=`
+
+<div class="dialogue">
+
+<div class="npcName">
+${npc.emoji} ${npc.name}
+</div>
+
+<div class="npcText">
+${response}
+</div>
+
+<div class="feedback good">
+❤️ Relationship: ${npc.relationship}
+</div>
+
+<button onclick="talk('${id}')">
+↩ Continue conversation
+</button>
+
+</div>
+
+`;
+
+renderNPCs();
+
+save();
+
+}
+
+
+/* =========================================================
+   JOB SYSTEM
+========================================================= */
+
+function applyJob(){
+
+let jobs={
+
+A1:"Dishwasher",
+A2:"Shop Assistant",
+B1:"Barista",
+B2:"Office Assistant",
+C1:"Junior Manager",
+C2:"Consultant"
+
+};
+
+let job=jobs[state.englishLevel];
+
+state.career=job;
+state.careerLevel=1;
+
+$("jobResult").innerHTML=
+`
+<div class="feedback good">
+Congratulations! You got a job as a <b>${job}</b>.
+</div>
+`;
+
+addHistory(`Started working as ${job}`);
+
+save();
+render();
+
+}
+
+function work(){
+
+if(state.career==="Unemployed"){
+
+toast("You need a job first.");
+
+return;
+
+}
+
+if(state.energy<15){
+
+toast("You're too tired.");
+
+return;
+
+}
+
+let salaries={
+A1:15,
+A2:20,
+B1:30,
+B2:45,
+C1:65,
+C2:100
+};
+
+let pay=salaries[state.englishLevel]||15;
+
+state.energy-=15;
+
+money(pay,`Worked as ${state.career}`);
+
+state.stats.hoursWorked++;
+
+addXP(10);
+
+englishXP(5);
+
+$("jobResult").innerHTML=
+`
+<div class="feedback good">
+You worked for one hour and earned <b>£${pay}</b>.
+</div>
+`;
+
+render();
+
+}
+
+
+/* =========================================================
+   BANK
+========================================================= */
+
+function deposit(){
+
+let amount=Number($("depositAmount").value);
+
+if(!amount||amount<=0)return;
+
+if(amount>state.money){
+
+toast("Not enough cash.");
+
+return;
+
+}
+
+state.money-=amount;
+state.bank+=amount;
+
+addHistory(`Deposited £${amount}`);
+
+render();
+
+}
+
+function withdraw(){
+
+let amount=Number($("depositAmount").value);
+
+if(!amount||amount<=0)return;
+
+if(amount>state.bank){
+
+toast("Not enough money in the bank.");
+
+return;
+
+}
+
+state.bank-=amount;
+state.money+=amount;
+
+addHistory(`Withdrew £${amount}`);
+
+render();
+
+}
+
+function renderTransactions(){
+
+$("transactions").innerHTML=
+state.history
+.filter(x=>x.includes("£"))
+.slice(0,12)
+.map(x=>`<div class="row">${x}</div>`)
+.join("");
+
+}
+
+
+/* =========================================================
+   SHOP
+========================================================= */
+
+const SHOP=[
+
+{
+name:"📚 English Dictionary",
+price:40,
+description:"Improves your study efficiency."
+},
+
+{
+name:"🎧 Headphones",
+price:80,
+description:"Perfect for listening practice."
+},
+
+{
+name:"💻 Laptop",
+price:300,
+description:"Required for better jobs."
+},
+
+{
+name:"☕ Coffee Machine",
+price:120,
+description:"Gives you extra energy each day."
+},
+
+{
+name:"🛋️ Better Sofa",
+price:200,
+description:"Makes your apartment more comfortable."
+},
+
+{
+name:"📱 Smartphone",
+price:250,
+description:"Unlocks advanced dialogue events."
+}
+
+];
+
+function renderShop(){
+
+$("shopItems").innerHTML=
+SHOP.map((item,i)=>`
+
+<div class="row shopItem">
+
+<div>
+<b>${item.name}</b>
+<div class="muted">
+${item.description}
+</div>
+</div>
+
+<div>
+£${item.price}
+
+<button
+onclick="buy(${i})">
+BUY
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+function buy(i){
+
+let item=SHOP[i];
+
+if(state.money<item.price){
+
+toast("Not enough money.");
+
+return;
+
+}
+
+state.money-=item.price;
+
+state.inventory.push(item.name);
+
+toast(`Purchased ${item.name}`);
+
+addHistory(`Bought ${item.name}`);
+
+render();
+
+}
+
+
+/* =========================================================
+   APARTMENT
+========================================================= */
+
+function sleep(){
+
+state.energy=Math.min(
+100,
+state.energy+60+state.apartment*5
+);
+
+toast("😴 You feel rested.");
+
+}
+
+function studyAtHome(){
+
+if(state.energy<10){
+
+toast("Too tired.");
+
+return;
+
+}
+
+state.energy-=10;
+
+englishXP(15);
+
+addXP(20);
+
+toast("📚 You studied at home.");
+
+}
+
+function upgradeApartment(){
+
+let cost=state.apartment*300;
+
+if(state.money<cost){
+
+toast(`You need £${cost}.`);
+
+return;
+
+}
+
+state.money-=cost;
+state.apartment++;
+
+toast(
+`🏠 Apartment upgraded to level ${state.apartment}!`
+);
+
+render();
+
+}
+
+function renderFurniture(){
+
+$("furniture").innerHTML=
+state.inventory.length
+?
+state.inventory.map(x=>`<span class="badge">${x}</span>`).join("")
+:
+`<span class="muted">Your apartment is suspiciously empty.</span>`;
+
+}
+
+
+/* =========================================================
+   TRAVEL
+========================================================= */
+
+function travelTo(place){
+
+state.location=place;
+
+let energyCost=place==="London"?0:10;
+
+if(state.energy<energyCost){
+
+toast("Not enough energy.");
+
+return;
+
+}
+
+state.energy-=energyCost;
+
+addHistory(`Travelled to ${place}`);
+
+toast(`📍 You arrived at ${place}.`);
+
+renderLocation();
+render();
+
+}
+
+function visitCountry(country){
+
+let cost=country==="England"?30:100;
+
+if(state.money<cost){
+
+toast(`You need £${cost} for this trip.`);
+
+return;
+
+}
+
+state.money-=cost;
+
+state.location=country;
+
+let events={
+
+England:"You order food in a busy café. The waiter speaks quickly.",
+USA:"A stranger asks you where you're from.",
+Canada:"Someone starts a friendly conversation about the weather.",
+Australia:"You have trouble understanding a local accent."
+
+};
+
+$("travelResult").innerHTML=`
+
+<div class="event">
+
+<h3>✈️ ${country}</h3>
+
+<p>${events[country]}</p>
+
+<button class="primary"
+onclick="travelExercise('${country}')">
+💬 Handle the situation in English
+</button>
+
+</div>
+
+`;
+
+addHistory(`Travelled to ${country}`);
+
+render();
+
+}
+
+function travelExercise(country){
+
+let phrases={
+
+England:["I'd like a coffee, please.","Could I have the menu?"],
+USA:["Nice to meet you.","Where are you from?"],
+Canada:["It's a beautiful day.","How are you doing?"],
+Australia:["Could you say that again?","What does that mean?"]
+
+};
+
+let phrase=random(phrases[country]);
+
+currentExercise={
+type:"travel",
+question:`What does this mean?<br><br><b>${phrase}</b>`,
+answer:translatePhrase(phrase),
+display:phrase,
+level:state.englishLevel
+};
+
+document.querySelector('[data-view="learn"]').click();
+
+$("exerciseArea").innerHTML=`
+
+<div class="exerciseWord">
+${phrase}
+</div>
+
+<input
+id="exerciseAnswer"
+class="answer"
+placeholder="Translate into Polish..."
+>
+
+<br><br>
+
+<button class="primary"
+onclick="checkExercise()">
+CHECK
+</button>
+
+`;
+
+}
+
+function translatePhrase(p){
+
+const translations={
+"I'd like a coffee, please.":"Poproszę kawę.",
+"Could I have the menu?":"Czy mogę prosić o menu?",
+"Nice to meet you.":"Miło cię poznać.",
+"Where are you from?":"Skąd jesteś?",
+"It's a beautiful day.":"To piękny dzień.",
+"How are you doing?":"Jak się masz?",
+"Could you say that again?":"Czy możesz powiedzieć to jeszcze raz?",
+"What does that mean?":"Co to znaczy?"
+};
+
+return translations[p]||"";
+
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function renderLocation(){
+
+let descriptions={
+
+London:"Your home city. Busy, expensive and full of English.",
+Cafe:"A small café where people talk about everything.",
+Office:"A place where emails reproduce faster than humans.",
+University:"Students, books and questionable coffee.",
+Airport:"The gateway to the English-speaking world.",
+Market:"Money disappears here surprisingly quickly.",
+Park:"A peaceful place to meet people.",
+Station:"Trains, announcements and listening practice."
+
+};
+
+$("locationInfo").innerHTML=`
+
+<div class="location">
+
+<div class="emoji">📍</div>
+
+<div>
+<h2>${state.location}</h2>
+<p>${descriptions[state.location]||"A mysterious location."}</p>
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   DAILY EVENTS
+========================================================= */
+
+function dailyEvents(){
+
+let events=[
+
+"☕ Your local café gives you a free coffee.",
+"📱 Someone sends you a message in English.",
+"💼 Your manager asks you to help a foreign client.",
+"🚆 The train announcement is only in English.",
+"🛍️ You find a strange discount in the shop.",
+"🎓 The university offers a free language workshop.",
+"🌧️ It starts raining. Everyone suddenly talks about the weather.",
+"📦 A mysterious package arrives at your apartment.",
+"🧑‍🤝‍🧑 A new person moves into your neighbourhood.",
+"💷 You find £10 on the street."
+
+];
+
+let event=random(events);
+
+$("dailyEvents").innerHTML=
+`<div class="event">${event}</div>`;
+
+}
+
+
+/* =========================================================
+   NEW DAY
+========================================================= */
+
+function newDay(){
+
+state.day++;
+
+state.stats.days++;
+
+state.energy=100;
+
+if(state.inventory.includes("☕ Coffee Machine")){
+
+state.energy=Math.min(
+110,
+state.energy+10
+);
+
+}
+
+let interest=Math.floor(state.bank*0.01);
+
+if(interest>0){
+
+state.bank+=interest;
+
+}
+
+randomDailyReward();
+
+dailyEvents();
+
+toast(`🌅 Day ${state.day} begins.`);
+
+addHistory(`Started day ${state.day}`);
+
+render();
+
+}
+
+function randomDailyReward(){
+
+let roll=Math.random();
+
+if(roll<0.25){
+
+money(10,"daily bonus");
+
+toast("🎁 You received £10.");
+
+}
+
+else if(roll<0.4){
+
+englishXP(10);
+
+toast("📚 Daily vocabulary bonus!");
+
+}
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function renderStats(){
+
+$("statistics").innerHTML=`
+
+<div class="row">
+<span>English level</span>
+<b>${state.englishLevel}</b>
+</div>
+
+<div class="row">
+<span>Total XP</span>
+<b>${state.xp}</b>
+</div>
+
+<div class="row">
+<span>Exercises</span>
+<b>${state.stats.exercises}</b>
+</div>
+
+<div class="row">
+<span>Correct</span>
+<b>${state.stats.correct}</b>
+</div>
+
+<div class="row">
+<span>Wrong</span>
+<b>${state.stats.wrong}</b>
+</div>
+
+<div class="row">
+<span>Accuracy</span>
+<b>${accuracy()}%</b>
+</div>
+
+<div class="row">
+<span>Conversations</span>
+<b>${state.stats.conversations}</b>
+</div>
+
+<div class="row">
+<span>Hours worked</span>
+<b>${state.stats.hoursWorked}</b>
+</div>
+
+<div class="row">
+<span>Money earned</span>
+<b>£${state.stats.moneyEarned}</b>
+</div>
+
+<div class="row">
+<span>Days survived</span>
+<b>${state.stats.days}</b>
+</div>
+
+`;
+
+}
+
+function accuracy(){
+
+if(!state.stats.exercises)return 0;
+
+return Math.round(
+state.stats.correct/
+state.stats.exercises*100
+);
+
+}
+
+function renderMistakes(){
+
+$("mistakeList").innerHTML=
+Object.entries(state.mistakes)
+.sort((a,b)=>b[1]-a[1])
+.map(([word,count])=>`
+
+<div class="row">
+
+<span>${word}</span>
+
+<span class="badge red">
+${count} mistakes
+</span>
+
+</div>
+
+`).join("") ||
+`<span class="muted">
+No mistakes recorded.
+</span>`;
+
+}
+
+function renderHistory(){
+
+$("history").innerHTML=
+state.history
+.slice(0,50)
+.map(x=>`<div>${x}</div>`)
+.join("");
+
+}
+
+
+/* =========================================================
+   ADDITIONAL RENDER
+========================================================= */
+
+function render(){
+
+$("level").textContent=state.level;
+$("xp").textContent=state.xp;
+$("money").textContent=state.money;
+$("energy").textContent=state.energy;
+$("day").textContent=state.day;
+$("engLevel").textContent=state.englishLevel;
+
+$("homeDay").textContent=state.day;
+$("bankBalance").textContent=state.bank;
+
+$("careerLevel").textContent=
+state.career==="Unemployed"
+?"Unemployed"
+:`${state.career} ${state.careerLevel}`;
+
+$("jobStatus").innerHTML=
+state.career==="Unemployed"
+?
+`You currently don't have a job.`
+:
+`
+You work as <b>${state.career}</b>.
+Career level: <b>${state.careerLevel}</b>
+`;
+
+let thresholds={
+A1:100,
+A2:150,
+B1:250,
+B2:350,
+C1:450,
+C2:600
+};
+
+LEVELS.forEach(level=>{
+
+let percent=Math.min(
+100,
+state.englishXP[level]/
+thresholds[level]*100
+);
+
+let el=$(level.toLowerCase()+"bar");
+
+if(el)el.style.width=percent+"%";
+
+});
+
+renderWeakWords();
+renderTransactions();
+renderStats();
+renderMistakes();
+renderHistory();
+renderFurniture();
+
+save();
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUT
+========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="Enter" &&
+$("exerciseAnswer") &&
+document.activeElement===$("exerciseAnswer")){
+
+checkExercise();
+
+}
+
+});
+
+
+/* =========================================================
+   AUTOSAVE
+========================================================= */
+
+setInterval(save,10000);
+
+
+/* =========================================================
+   FIRST MESSAGE
+========================================================= */
+
+setTimeout(()=>{
+
+toast(
+`👋 Welcome to English Life. Your English level is ${state.englishLevel}.`
+);
+
+},2500);
+
+</script>
+
+</body>
+</html>
